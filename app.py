@@ -1,11 +1,9 @@
 import streamlit as st
 import anthropic
 
-# Inicializa el cliente de Anthropics con la API Key
-client = anthropic.Anthropic(api_key="my_api_key")
-
 # Función para llamar a la API y obtener la respuesta mejorada
-def improve_prompt(original_prompt, task_description):
+def improve_prompt(api_key, original_prompt, task_description):
+    client = anthropic.Anthropic(api_key=api_key)
     message = client.messages.create(
         model="claude-3-5-sonnet-20240620",
         max_tokens=1000,
@@ -54,16 +52,17 @@ def improve_prompt(original_prompt, task_description):
 
 # Interfaz de usuario de Streamlit
 st.title("Mejora de Prompts con Anthropics API")
-st.write("Ingrese el prompt original y la descripción de la tarea para obtener un prompt mejorado.")
+st.write("Ingrese su API Key, el prompt original y la descripción de la tarea para obtener un prompt mejorado.")
 
 # Entrada de usuario
+api_key = st.text_input("API Key", type="password")
 original_prompt = st.text_area("Prompt Original")
 task_description = st.text_area("Descripción de la Tarea")
 
 if st.button("Mejorar Prompt"):
-    if original_prompt and task_description:
-        improved_prompt = improve_prompt(original_prompt, task_description)
+    if api_key and original_prompt and task_description:
+        improved_prompt = improve_prompt(api_key, original_prompt, task_description)
         st.subheader("Prompt Mejorado")
         st.write(improved_prompt)
     else:
-        st.error("Por favor, ingrese tanto el prompt original como la descripción de la tarea.")
+        st.error("Por favor, ingrese su API Key, el prompt original y la descripción de la tarea.")
