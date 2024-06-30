@@ -1,6 +1,5 @@
 import streamlit as st
 import anthropic
-from pyrtf_ng import Renderer, Document, Section, Paragraph
 
 # Función para llamar a la API y obtener la respuesta mejorada
 def improve_prompt(api_key, original_prompt, task_description):
@@ -51,21 +50,6 @@ def improve_prompt(api_key, original_prompt, task_description):
     )
     return message.content
 
-# Función para crear un archivo RTF con el contenido
-def create_rtf(content):
-    doc = Document()
-    section = Section()
-    section.append(Paragraph(content))
-    doc.Sections.append(section)
-    
-    renderer = Renderer()
-    rtf_file = "improved_prompt.rtf"
-    
-    with open(rtf_file, "w") as file:
-        renderer.Write(doc, file)
-    
-    return rtf_file
-
 # Interfaz de usuario de Streamlit
 st.title("Mejora de Prompts con Anthropics API")
 st.write("Ingrese su API Key, el prompt original y la descripción de la tarea para obtener un prompt mejorado.")
@@ -79,15 +63,6 @@ if st.button("Mejorar Prompt"):
     if api_key and original_prompt and task_description:
         improved_prompt = improve_prompt(api_key, original_prompt, task_description)
         st.subheader("Prompt Mejorado")
-        st.write(improved_prompt)  # Muestra el contenido en la aplicación
-        
-        rtf_file = create_rtf(improved_prompt)
-        with open(rtf_file, "rb") as file:
-            btn = st.download_button(
-                label="Descargar Prompt Mejorado en RTF",
-                data=file,
-                file_name="improved_prompt.rtf",
-                mime="application/rtf"
-            )
+        st.markdown(improved_prompt)
     else:
         st.error("Por favor, ingrese su API Key, el prompt original y la descripción de la tarea.")
