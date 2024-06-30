@@ -63,6 +63,6 @@ if st.button("Mejorar Prompt"):
     if api_key and original_prompt and task_description:
         improved_prompt = improve_prompt(api_key, original_prompt, task_description)
         st.subheader("Prompt Mejorado")
-        st.write(improved_prompt)
+        st.markdown(improved_prompt)
     else:
         st.error("Por favor, ingrese su API Key, el prompt original y la descripción de la tarea.")
